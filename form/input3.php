@@ -11,7 +11,16 @@
 // CSRF(Cross-Site Request Forgeries)対策
 /*CSRFは偽物のinput.phpから悪意のあるページに情報を飛ばしてしまう
 本物と偽物を見分けるために、$_SESSIONを使ったトークンを発行して対策する
-※$_GET, $_POSTは一回きりだが、$_SESSIONは残る
+※$_GET, $_POSTは一回きりでデータが消えるが、$_SESSIONはずっと残る
+
+<?php if($pageFlag === 0 ) : ?>
+<?php
+if(!isset($_SESSION['csrfToken'])){
+  $csrfToken = bin2hex(random_bytes(32));
+  $_SESSION['csrfToken'] = $csrfToken;
+}
+$token = $_SESSION['csrfToken'];
+?>
 */
 session_start();
 
@@ -86,7 +95,7 @@ if(!empty($_POST['btn_submit'])){
 <?php
 if(!isset($_SESSION['csrfToken'])){
   $csrfToken = bin2hex(random_bytes(32));
-  $_SESSION['csrfToken'] = csrfToken;
+  $_SESSION['csrfToken'] = $csrfToken;
 }
 $token = $_SESSION['csrfToken'];
 ?>
